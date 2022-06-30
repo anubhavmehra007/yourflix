@@ -11,8 +11,6 @@ import (
 	"github.com/gorilla/mux"
 	"os"
 	"os/exec"
-	//"database/sql"
-	//"github.com/go-sql-driver/mysql"
 )
 func test(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusOK)
@@ -59,9 +57,10 @@ func main() {
 	r.HandleFunc("/addMovie", addMovie).Methods("POST");
 	r.HandleFunc("/subtitle/{id}", sendSubtitle).Methods("GET");
 	r.HandleFunc("/subtitle", showSubtitlesList).Methods("GET");
+	const serverString : string = fmt.Sprintf("%s %d", def.dbhost, def.port);
 	srv := &http.Server{
         Handler:      r,
-        Addr:         "127.0.0.1:8000",
+        Addr:         serverString,
         WriteTimeout: 15 * time.Second,
         ReadTimeout:  15 * time.Second,
     }

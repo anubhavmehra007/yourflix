@@ -4,6 +4,7 @@ type struct CONFIG {
 	dbuser string
 	dbpassword string
 	dbhost string
+	database string
 	port int
 	ffmpeg string
 }
@@ -12,6 +13,7 @@ const def = CONFIG{
 	"root",
 	"root@123", 
 	"localhost",
+	"amvflix",
 	8000,
 	"ffmpeg"
 }
