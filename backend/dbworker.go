@@ -31,7 +31,8 @@ func NewDBWorker() DBWorker {
 	return dbworker;
 }
 func (dbworker *DBWorker) allMovies() [] Movie {
-	result, err := dbworker.Query("Select * from movies");
+	result, err := dbworker.db.Query("Select * from movies");
+	var movies []Movie;
 	if err != nil {
 		panic(err)
 	}
@@ -39,23 +40,46 @@ func (dbworker *DBWorker) allMovies() [] Movie {
 		var movie Movie;
 		var id int;
 		var genres[] int;
-		err = result.Scan(&id, &Movie.name, &Movie.director, &Movie.path);
+		err = result.Scan(&id, &movie.Name, &movie.Director, &movie.path);
 		if err != nil {
 			panic(err);
 		}
-		genres, err := db.Query(fmt.Sprintf("SELECT genre_id from movie_genre where movie_id=%d"),id);
+		genresResults, err := dbworker.db.Query(fmt.Sprintf("SELECT genre_id from movie_genre where movie_id='%d'", id));
 		if err != nil {
 			panic(err);
 		}
+		for genresResults.Next() {
+			var genre int;
+			err = genresResults.Scan(&genre);
+			if err != nil {
+				panic(err);
+			}
+			genres = append(genres, genre);
+		}
+		movie.Id = fmt.Sprintf("%d", id);
+		movie.Genres = genres;
+		movies = append(movies, movie);
 	}
-	return nil;
+	return movies;
 }
 func (dbworker *DBWorker) theMovie(id string)  Movie {
-	movie := Movie {
-		"1",
-		"True Sight TI7",
-		"Valve",
-		[] int {1},
-		"/home/anubhav/react/your-flix/backend/content/ti7.mp4" };
+	var movie Movie;
+	var idNum int;
+	err := dbworker.db.QueryRow(fmt.Sprintf("SELECT * FROM movies WHERE movie_id = '%s'", id)).Scan(&idNum, &movie.Name, &movie.Director, &movie.path);
+	if err != nil {
+		panic(err);
+	}
+	movie.Id = id;
+	var genres []int;
+	result, err := dbworker.db.Query(fmt.Sprintf("SELECT genre_id from movie_genre WHERE movie_id = '%s'",id));
+	if err != nil {
+		panic(err);
+	}
+	for result.Next() {
+		var genreId int;
+		result.Scan(&genreId);
+		genres = append(genres, genreId);
+	}
+	movie.Genres = genres;
 	return movie;
 }

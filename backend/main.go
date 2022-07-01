@@ -7,7 +7,6 @@ import (
 	"fmt"
 	//"math/rand"
 	//"strconv"
-	//"encoding/json"
 	"github.com/gorilla/mux"
 	"os"
 	"os/exec"
@@ -46,9 +45,10 @@ func main() {
 	8000,
 	"ffmpeg" }
 	r := mux.NewRouter()
-	//r.HandleFunc("/movies", showMovies(dbworker)).Methods("GET");
+	r.HandleFunc("/movies", showMovies(dbworker)).Methods("GET");
 	//r.HandleFunc("/genres", showGenres(dbworker)).Methods("GET");
 	r.HandleFunc("/movie/{id}", findMovie(dbworker)).Methods("GET");
+	r.HandleFunc("/play/{id}", playMovie(dbworker)).Methods("GET");
 	//r.HandleFunc("/addMovie", addMovie).Methods("POST");
 	//r.HandleFunc("/subtitle/{id}", sendSubtitle).Methods("GET");
 	//r.HandleFunc("/subtitle", showSubtitlesList).Methods("GET");

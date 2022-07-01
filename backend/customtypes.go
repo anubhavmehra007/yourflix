@@ -1,10 +1,10 @@
 package main
 //to represent movies
 type Movie struct {
-	id string
-	name string
-	director string
-	genres [] int
+	Id string
+	Name string
+	Director string
+	Genres [] int
 	path string
 }
 //to represent config
