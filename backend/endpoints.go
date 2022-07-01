@@ -11,7 +11,9 @@ func showMovies(dbworker DBWorker) http.HandlerFunc {
 		panic(err);
 	}
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "applicaiton/json");
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+	    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Content-Type", "application/json");
 		w.WriteHeader(http.StatusOK);
 		w.Write(jsonResponse);
 	}
@@ -25,7 +27,9 @@ func findMovie(dbworker DBWorker) http.HandlerFunc {
 		if err != nil {
 			panic(err);
 		}
-		w.Header().Set("Content-Type", "applicaiton/json");
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+	    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Content-Type", "application/json");
 		w.WriteHeader(http.StatusOK);
 		w.Write(jsonResponse);
 	}
@@ -33,6 +37,8 @@ func findMovie(dbworker DBWorker) http.HandlerFunc {
 func playMovie(dbworker DBWorker) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) { 
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+	    w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		vars := mux.Vars(r);
 		id := vars["id"];
 		movie := dbworker.theMovie(id);
